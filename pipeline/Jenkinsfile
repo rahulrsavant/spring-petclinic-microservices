@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage("Build and Unit Test"){
             steps{
-                echo "build the app and run the unit tests"
+                sh "mvn -B clean package"
                 echo "build all docker images"
             }
         }
