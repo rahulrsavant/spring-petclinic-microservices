@@ -1,0 +1,26 @@
+pipeline{
+    agent { label "master"}
+    stages{
+        stage("Build and Unit Test"){
+            steps{
+                echo "build the app and run the unit tests"
+                echo "build all docker images"
+            }
+        }
+        stage("Deploy"){
+            steps{
+                echo "deploy with docker compose"
+            }
+        }
+        stage("Quality"){
+            steps{
+                echo "exploratory tests"
+            }
+        }
+        stage("Publish"){
+            steps{
+                echo "publish to Nexus"
+            }
+        }
+    }
+}
