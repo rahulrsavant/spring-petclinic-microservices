@@ -49,7 +49,7 @@ pipeline{
 
                     //stash package
                     stash(includes: "${env.artifactPatternToArchive}", name: "${env.appName}Package")
-                    milestone(label: 'Build, Code Analysis and Publish to Nexus Snapshot', ordinal: 2)
+                    milestone(label: 'Build and Unit Test', ordinal: 1)
                 }
             }
         }
@@ -112,6 +112,7 @@ pipeline{
                 always{
                     //clean deployment
                     sh "docker-compose -f docker-compose.yml rm --force --stop"
+                    milestone(label: 'Quality', ordinal: 1)
                 }
             }
         }
