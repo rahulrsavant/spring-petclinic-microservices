@@ -99,17 +99,18 @@ pipeline{
         }
         stage("Deploy"){
             steps{
-                echo "deploy with docker compose"
+                sh "echo \"image_tag=${env.image_tag}\" > ${pwd()}/.env"
+                sh "docker-compose -f docker-compose.yml up -d"
             }
         }
         stage("Quality"){
             steps{
-                input "Check localhost:9091. Does everything looks good? If yes lets publish our artifacts"
+                input "Check http://localhost:8080. Does everything looks good? If yes lets publish our artifacts"
             }
             post{
                 always{
                     //clean deployment
-                    echo "clean deployment"
+                    sh "docker-compose -f docker-compose.yml rm --force --stop"
                 }
             }
         }
