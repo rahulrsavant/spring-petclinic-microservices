@@ -16,6 +16,8 @@ pipeline{
         visitsServiceArtifactId="spring-petclinic-visits-service"
         artifactPatternToArchive="target/**/*.jar"
         artifactPackaging="jar"
+        junitTestStashIncludes='target/unit-test/**/*'
+        junitArchiveTests="target/unit-test/surefire-reports/TEST-*.xml"
     }
 
     stages{
@@ -26,10 +28,18 @@ pipeline{
             }
             post{
                 always{
-                    echo "archive tests"
+                    //archive unit test in Jenkins
+                    junit "${env.junitArchiveTests}"
+                    //stash unit test
+                    stash(includes: "${env.junitTestStashIncludes}", name: "${env.appName}UnitTest")
                 }
                 success{
-                    echo "archive artifacts"
+                    //archive package in Jenkins
+                    archiveArtifacts allowEmptyArchive: true, artifacts: "${env.artifactPatternToArchive}", fingerprint: true, onlyIfSuccessful: true
+
+                    //stash package
+                    stash(includes: "${env.artifactPatternToArchive}", name: "${env.appName}Package")
+                    milestone(label: 'Build, Code Analysis and Publish to Nexus Snapshot', ordinal: 2)
                 }
             }
         }
@@ -47,6 +57,11 @@ pipeline{
             steps{
                 echo "publish to Nexus"
             }
+        }
+    }
+    post{
+        always{
+            deleteDir()
         }
     }
 }
