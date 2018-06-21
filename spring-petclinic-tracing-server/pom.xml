@@ -76,7 +76,7 @@
                             <workingDirectory>${basedir}/target</workingDirectory>
                             <arguments>
                                 <argument>-R</argument>
-                                <argument>${artifactId}-${version}.jar</argument>
+                                <argument>${project.artifactId}-${version}.jar</argument>
                                 <argument>../../target/</argument>
                             </arguments>
                         </configuration>
