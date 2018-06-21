@@ -18,13 +18,23 @@ pipeline{
         artifactPackaging="jar"
         junitTestStashIncludes='target/unit-test/**/*'
         junitArchiveTests="target/unit-test/surefire-reports/TEST-*.xml"
+
+        adminServerPort="9090"
+        apiGatewayPort="8080"
+        configServerPort="8888"
+        customersServicePort="8081"
+        discoveryServerPort="8761"
+        //monitoringPort=""
+        tracingServerPort="9411"
+        vetsServicePort="8083"
+        visitsServicePort="8082"
+
     }
 
     stages{
         stage("Build and Unit Test"){
             steps{
                 sh "mvn -B clean package -Drevision=${version}"
-                echo "build all docker images"
             }
             post{
                 always{
@@ -40,6 +50,19 @@ pipeline{
                     //stash package
                     stash(includes: "${env.artifactPatternToArchive}", name: "${env.appName}Package")
                     milestone(label: 'Build, Code Analysis and Publish to Nexus Snapshot', ordinal: 2)
+                }
+            }
+        }
+        stage("Build Docker"){
+            parallel{
+                stage("Docker 1 set"){
+                    //adminServerArtifactId
+                    sh "docker build --build-arg ARTIFACT_NAME=${adminServerArtifactId}-${version} " +
+                            "--build-arg EXPOSED_PORT=${adminServerPort} -f docker/Dockerfile " +
+                            "-t ${appName}/${adminServerArtifactId}:${version} ."
+                }
+                stage("Docker 2 set"){
+
                 }
             }
         }
