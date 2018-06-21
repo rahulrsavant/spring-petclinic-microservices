@@ -50,7 +50,7 @@ pipeline{
         }
         stage("Quality"){
             steps{
-                echo "exploratory tests"
+                input "Check localhost:9091. Does everything looks good? If yes lets publish our artifacts"
             }
         }
         stage("Publish"){
