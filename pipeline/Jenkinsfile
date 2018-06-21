@@ -56,13 +56,17 @@ pipeline{
         stage("Build Docker"){
             parallel{
                 stage("Docker 1 set"){
-                    //adminServerArtifactId
-                    sh "docker build --build-arg ARTIFACT_NAME=${adminServerArtifactId}-${version} " +
-                            "--build-arg EXPOSED_PORT=${adminServerPort} -f docker/Dockerfile " +
-                            "-t ${appName}/${adminServerArtifactId}:${version} ."
+                    steps {
+                        //adminServerArtifactId
+                        sh "docker build --build-arg ARTIFACT_NAME=${adminServerArtifactId}-${version} " +
+                                "--build-arg EXPOSED_PORT=${adminServerPort} -f docker/Dockerfile " +
+                                "-t ${appName}/${adminServerArtifactId}:${version} ."
+                    }
                 }
                 stage("Docker 2 set"){
-
+                    steps {
+                        echo "2nd set"
+                    }
                 }
             }
         }
