@@ -1,7 +1,4 @@
-FROM openjdk:8-jdk-alpine
-
-RUN apk add openssl zip unzip curl wget bash
-
+FROM openjdk:8
 VOLUME /tmp
 ADD docker/wait-for-it.sh wait-for-it.sh
 RUN bash -c 'chmod +x wait-for-it.sh'
