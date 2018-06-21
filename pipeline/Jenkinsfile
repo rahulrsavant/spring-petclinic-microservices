@@ -65,11 +65,11 @@ pipeline{
                         sh "docker build --build-arg ARTIFACT_NAME=${apiGatewayArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${apiGatewayPort} -f docker/Dockerfile " +
                                 "-t ${appName}/${apiGatewayArtifactId}:${version} ."
-
+                        //configServerArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${configServerArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${configServerPort} -f docker/Dockerfile " +
                                 "-t ${appName}/${configServerArtifactId}:${version} ."
-
+                        //customersServiceArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${customersServiceArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${customersServicePort} -f docker/Dockerfile " +
                                 "-t ${appName}/${customersServiceArtifactId}:${version} ."
@@ -78,18 +78,19 @@ pipeline{
                 }
                 stage("Docker 2 set"){
                     steps {
+                        //discoveryServerArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${discoveryServerArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${discoveryServerPort} -f docker/Dockerfile " +
                                 "-t ${appName}/${discoveryServerArtifactId}:${version} ."
-
+                        //tracingServerArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${tracingServerArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${tracingServerPort} -f docker/Dockerfile " +
                                 "-t ${appName}/${tracingServerArtifactId}:${version} ."
-
+                        //vetsServiceArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${vetsServiceArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${vetsServicePort} -f docker/Dockerfile " +
                                 "-t ${appName}/${vetsServiceArtifactId}:${version} ."
-
+                        //visitsServiceArtifactId
                         sh "docker build --build-arg ARTIFACT_NAME=${visitsServiceArtifactId}-${version} " +
                                 "--build-arg EXPOSED_PORT=${visitsServicePort} -f docker/Dockerfile " +
                                 "-t ${appName}/${visitsServiceArtifactId}:${version} ."
@@ -99,7 +100,7 @@ pipeline{
         }
         stage("Deploy"){
             steps{
-                sh "echo \"image_tag=${env.image_tag}\" > ${pwd()}/.env"
+                sh "echo \"image_version=${env.version}\" > ${pwd()}/.env"
                 sh "docker-compose -f docker-compose.yml up -d"
             }
         }
