@@ -106,6 +106,12 @@ pipeline{
             steps{
                 input "Check localhost:9091. Does everything looks good? If yes lets publish our artifacts"
             }
+            post{
+                always{
+                    //clean deployment
+                    echo "clean deployment"
+                }
+            }
         }
         stage("Publish"){
             steps{
