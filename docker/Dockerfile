@@ -1,10 +1,10 @@
 FROM openjdk:8
 VOLUME /tmp
-ADD wait-for-it.sh wait-for-it.sh
+ADD docker/wait-for-it.sh wait-for-it.sh
 RUN bash -c 'chmod +x wait-for-it.sh'
 ARG ARTIFACT_NAME
 ARG EXPOSED_PORT
-ADD ../target/${ARTIFACT_NAME}.jar /app.jar
+ADD target/${ARTIFACT_NAME}.jar /app.jar
 ENV SPRING_PROFILES_ACTIVE docker
 RUN bash -c 'touch /app.jar'
 EXPOSE ${EXPOSED_PORT}
