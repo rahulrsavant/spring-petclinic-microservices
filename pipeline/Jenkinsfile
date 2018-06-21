@@ -83,7 +83,7 @@ pipeline{
                                 "-t ${appName}/${discoveryServerArtifactId}:${version} ."
 
                         sh "docker build --build-arg ARTIFACT_NAME=${tracingServerArtifactId}-${version} " +
-                                "--build-arg EXPOSED_PORT=${tracingServerAPort} -f docker/Dockerfile " +
+                                "--build-arg EXPOSED_PORT=${tracingServerPort} -f docker/Dockerfile " +
                                 "-t ${appName}/${tracingServerArtifactId}:${version} ."
 
                         sh "docker build --build-arg ARTIFACT_NAME=${vetsServiceArtifactId}-${version} " +
