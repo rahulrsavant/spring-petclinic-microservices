@@ -18,7 +18,8 @@ pipeline{
         artifactPackaging="jar"
         junitTestStashIncludes='target/unit-test/**/*'
         junitArchiveTests="target/unit-test/surefire-reports/TEST-*.xml"
-
+        nexusUrl="http://192.168.1.194:8084/"
+        nexusCredentialsId="nexusCredentials"
         adminServerPort="9090"
         apiGatewayPort="8080"
         configServerPort="8888"
@@ -117,9 +118,22 @@ pipeline{
             }
         }
         stage("Publish"){
-            steps{
-                echo "publish to Nexus"
-                sh "curl -v -u admin:admin123 --upload-file ${pwd()}/target/${discoveryServerArtifactId}-${version}.${artifactPackaging} http://localhost:8084/repository/maven-releases/${nexusGroupIdPath}/${version}/${discoveryServerArtifactId}-${version}.${artifactPackaging}"
+            steps {
+                withCredentials([[$class          : 'UsernamePasswordMultiBinding',
+                                  credentialsId   : "${env.nexusCredentialsId}",
+                                  usernameVariable: 'usr',
+                                  passwordVariable: 'passwd']]) {
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${adminServerArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${adminServerArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${apiGatewayArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${apiGatewayArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${configServerArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${configServerArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${customersServiceArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${customersServiceArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${discoveryServerArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${discoveryServerArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${monitoringArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${monitoringArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${tracingServerArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${tracingServerArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${vetsServiceArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${vetsServiceArtifactId}-${version}.${artifactPackaging}"
+                    sh "curl -v -u ${env.usr}:${env.passwd} --upload-file ${pwd()}/target/${visitsServiceArtifactId}-${version}.${artifactPackaging} ${nexusUrl}/repository/maven-releases/${nexusGroupIdPath}/${version}/${visitsServiceArtifactId}-${version}.${artifactPackaging}"
+
+                }
             }
         }
     }
