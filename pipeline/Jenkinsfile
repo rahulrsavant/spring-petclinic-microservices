@@ -119,6 +119,7 @@ pipeline{
         stage("Publish"){
             steps{
                 echo "publish to Nexus"
+                sh "curl -v -u admin:admin123 --upload-file ${pwd()}/target/${discoveryServerArtifactId}-${version}.${artifactPackaging} http://localhost:8084/repository/maven-releases/${nexusGroupIdPath}/${version}/${discoveryServerArtifactId}-${version}.${artifactPackaging}"
             }
         }
     }
