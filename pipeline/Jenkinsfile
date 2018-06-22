@@ -18,7 +18,7 @@ pipeline{
         artifactPackaging="jar"
         junitTestStashIncludes='target/unit-test/**/*'
         junitArchiveTests="target/unit-test/surefire-reports/TEST-*.xml"
-        nexusUrl="http://192.168.1.194:8084/"
+        nexusUrl="http://192.168.1.194:8084"
         nexusCredentialsId="nexusCredentials"
         adminServerPort="9090"
         apiGatewayPort="8080"
