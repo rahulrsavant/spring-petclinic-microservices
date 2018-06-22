@@ -106,13 +106,13 @@ pipeline{
         }
         stage("Quality"){
             steps{
-                input "Check http://localhost:8080. Does everything looks good? If yes lets publish our artifacts"
+                input "Check the eKosystem. Does everything looks good? If yes lets publish our artifacts"
             }
             post{
                 always{
                     //clean deployment
                     sh "docker-compose -f docker-compose.yml rm --force --stop"
-                    milestone(label: 'Quality', ordinal: 1)
+                    milestone(label: 'Quality', ordinal: 2)
                 }
             }
         }
