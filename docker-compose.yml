@@ -80,7 +80,7 @@ services:
      - discovery-server
     entrypoint: ["./wait-for-it.sh","discovery-server:8761","--timeout=60","--","java", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
     ports:
-     - 8080:8080
+     - 8085:8080
 
   tracing-server:
     image: spring-petclinic-microservices/spring-petclinic-tracing-server:${image_version}
