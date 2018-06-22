@@ -8,13 +8,39 @@
     <artifactId>spring-petclinic-monitoring</artifactId>
     <packaging>jar</packaging>
     <description>Spring PetClinic monitoring utilities</description>
-
+    <version>${revision}</version>
     <parent>
         <groupId>org.springframework.samples</groupId>
         <artifactId>spring-petclinic-microservices</artifactId>
-        <version>1.5.9</version>
+        <version>${revision}</version>
     </parent>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>copy_artifact</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>cp</executable>
+                            <workingDirectory>${basedir}/target</workingDirectory>
+                            <arguments>
+                                <argument>-R</argument>
+                                <argument>${project.artifactId}-${version}.jar</argument>
+                                <argument>../../target/</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
     <dependencies>
         <!-- Spring dependencies -->
         <dependency>
